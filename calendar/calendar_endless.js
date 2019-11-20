@@ -10,7 +10,6 @@ import { Translate, withLocalize } from 'react-localize-redux';
 //import * as Scroll from 'react-scroll';
 import Config from '../../../../reducers/config.json';
 
-    const isMobile = window.innerWidth <= 500;
     const Calendar = styled.div`   
         width:100%;
         xheight:100px;
@@ -226,52 +225,12 @@ class CalendarEndless extends Component{
         this.currentOffset = this.refScrollCalendar.current.scrollLeft;
 
     }
-    test(event){
-            // Stuff
-            console.log("SHI!T", event.data);
-            
-            
-            let monthsScrolled = $(this).scrollLeft()/parseInt(event.data.widthCalendar);
-            console.log("HAY SCROLLLL", monthsScrolled);
-            if(((monthsScrolled%1) > 0.25)){
-                console.log("SE PASÖ!");
-                $(".core_calendar").off('scroll');
-                event.data.nextMonth();
-            }
-         
-    }
     componentDidMount(){
         let that = this;
         //$(".core_calendar").on('scroll', that , this.test);
         this.arrayMonthItems = document.getElementsByClassName("monthItem"); 
-        //this.refScrollCalendar.current.addEventListener("scroll", this.handleScroll, true );
     }
-    // getSnapshotBeforeUpdate(prevProps, prevState) {
-    //     // Are we adding new items to the list?
-    //     // Capture the scroll position so we can adjust scroll later.
-        
-    //         //console.log("prevProps", prevProps);
-        
-    //         const refScrollCalendar = this.refScrollCalendar.current;
-    //         return refScrollCalendar.scrollLeft;
-        
-                   
-    // }
-    // componentDidUpdate(prevProps, prevState, snapshot) {
-    //     // If we have a snapshot value, we've just added new items.
-    //     // Adjust scroll so these new items don't push the old ones out of view.
-    //     // (snapshot here is the value returned from getSnapshotBeforeUpdate)
-    //     // console.log("snapshot", snapshot);
-    //     // if (snapshot !== null) {
-    //     //   const refScrollCalendar = this.refScrollCalendar.current;
-    //     //   refScrollCalendar.scrollLeft = snapshot;
-    //     // }
-    //     console.log("Has Props changed?", _.isEqual(this.props, prevProps));
-    //     console.log("Has State changed?", _.isEqual(this.state, prevState))
-    //     if(this.refScrollCalendar.current){
-    //         this.refScrollCalendar.current.scrollLeft = this.currentScroll; 
-    //     }
-    //   }
+    
     render(){
         console.log("%c Render Calendar Endless", 'background: #222; color: #bada55');
         console.log(this.calConf);
@@ -322,57 +281,7 @@ class CalendarEndless extends Component{
                                     session = {session}  updateSession = { () => this.updateSession(session)}>
 
                                 </SessionButton>
-                            );
-                            let occupancyClassName = this.occupancyState[0];
-                            if(session.percentAvailable < 0.5){
-                                occupancyClassName = this.occupancyState[1];
-                                if(session.percentAvailable < 0.2 ){
-                                    occupancyClassName = this.occupancyState[2];
-                                    if(session.percentAvailable === 0 ){
-                                        occupancyClassName = this.occupancyState[3];
-                                    }
-                                }
-                            }
-                            if(this.props.calendar.hasOwnProperty("selectedSession") && this.props.calendar.selectedSession === session){
-                                return (
-                                <SessionButtonSelected disabled={true} className="sessionButton selected" onClick={ (e) => { this.selectedSession(session) }}>
-                                    <OccupancyMeterHolder>
-                                        <OccupancyMeter className={occupancyClassName} />
-                                    </OccupancyMeterHolder>
-                                    <TimeHolder>
-                                        { moment(session.startSession*1000).format("HH:mm") }
-                                    </TimeHolder>    
-                                </SessionButtonSelected>);
-                            }
-                            else if((this.state.sessionLoading == session.idSession) && (!this.props.tags.dictTags.hasOwnProperty(session.idSession))){
-                                return(<SessionButton className="sessionButton" onClick={ (e) => { this.selectedSession(session) }}>
-                                        <OccupancyMeterHolder>
-                                            <OccupancyMeter className={occupancyClassName} />
-                                        </OccupancyMeterHolder>
-                                        <TimeHolder>
-                                            { moment(session.startSession*1000).format("HH:mm") }
-                                        </TimeHolder>
-                                        <LoadingBall>
-                                            <img src="/img/loading.gif" height="100%" />
-                                        </LoadingBall>
-                                    </SessionButton>);
-                            }
-                            else{
-                                if((this.state.sessionLoading === session.idSession) && (this.props.tags.dictTags.hasOwnProperty(session.idSession) ||!session.extra.hasTags)){
-                                    this.setState({sessionLoading : null});
-                                    this.selectedSession(session);
-                                }                                
-                                return(
-                                    <SessionButton className="sessionButton" onClick={ (e) => { this.selectedSession(session) }}>
-                                        <OccupancyMeterHolder>
-                                            <OccupancyMeter className={occupancyClassName} />
-                                        </OccupancyMeterHolder>
-                                        <TimeHolder>
-                                            { moment(session.startSession*1000).format("HH:mm") }
-                                        </TimeHolder>
-                                    </SessionButton>);
-                            }
-                            
+                            );                            
                         });
                         currentElement = 
                         <DayContainer className="dayCore" key={i}>
@@ -386,13 +295,9 @@ class CalendarEndless extends Component{
                     currentElement = <DayContainer className="emptyDay" key={i} ></DayContainer>;    
                 }   
     
-                //currentContainer =  <DayContainer className="dayContainer" key={i} >{ currentElement }</DayContainer>;    
+                
                 datesMonthItem.push(currentElement);
-                // if(i % 7 == 0 && i !== 0){
-                //     calendarHTML[weekIndex] = <WeekContainer key={ weekIndex }>{ weekContainer }</WeekContainer>  ;
-                //     weekIndex++;
-                //     weekContainer = [];//Necesito asignar otra dirección de memoria.
-                // }
+                
     
                 weekContainer[i % 7] = currentContainer;     
             }
